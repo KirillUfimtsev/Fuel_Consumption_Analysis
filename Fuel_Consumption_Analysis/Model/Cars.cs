@@ -15,6 +15,30 @@ namespace Fuel_Consumption_Analysis.Model
     public partial class Cars
     {
         public string CarID { get; set; }
-        public string Name { get; set; }
+        public string MarkID { get; set; }
+        public string ModelID { get; set; }
+        public double Consumption { get; set; }
+        public double Distance { get; set; }
+        public double Result { get; set; }
+        public System.DateTime Date { get; set; }
+    
+        public virtual CarMarks CarMarks { get; set; }
+        public virtual CarModels CarModels { get; set; }
+
+        public string Model
+        {
+            get
+            {
+                return this.CarModels.Title;
+            }
+        }
+
+        public string Mark
+        {
+            get
+            {
+                return this.CarMarks.Title;
+            }
+        }
     }
 }

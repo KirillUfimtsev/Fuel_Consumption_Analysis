@@ -10,68 +10,103 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width='220*'/>
-            <ColumnDefinition Width="220*"/>
-            <ColumnDefinition Width="220*"/>
+            <ColumnDefinition Width='110*'/>
+            <ColumnDefinition Width="150*"/>
+            <ColumnDefinition Width="150*"/>
             <ColumnDefinition Width="80*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="56"/>
             <RowDefinition/>
-            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
 
 
-        <TextBox Name="txtSearch" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5, 0, 5, 0" SelectionChanged="txtSearch_SelectionChanged"/>
-        <ComboBox Name="cmbSorting" Grid.Row="1" Grid.Column="1" SelectedIndex="0" VerticalAlignment="Center" Margin="5, 0, 5, 0" ItemsSource="{Binding SortingList}" SelectionChanged="cmbSorting_SelectionChanged"/>
-        <ComboBox Name="cmbFilter" Grid.Row="1" Grid.Column="2" SelectedIndex="0" VerticalAlignment="Center" Margin="5, 0, 5, 0" ItemsSource="{Binding FilterList}" SelectionChanged="cmbFilter_SelectionChanged"/>
+        <TextBox Name="txtSearch" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5, 0, 5, 0" SelectionChanged="txtSearch_SelectionChanged"/>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center"  HorizontalAlignment="Center">
-            <TextBlock x:Name="txtResultAmount"/>
-            <TextBlock Text="из"/>
-            <TextBlock x:Name="txtAllAmount"/>
-        </StackPanel>
 
-        <ListView x:Name="LViewRecords" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="2" d:ItemsSource="{d:SampleData ItemCount=1}" SelectionChanged="LViewRecords_SelectionChanged" VerticalAlignment="Top">
+        <ComboBox Name="cmbSorting" BorderThickness="0" Grid.Row="0" Grid.Column="1" SelectedIndex="0" VerticalAlignment="Center" Margin="5, 0, 5, 0" ItemsSource="{Binding SortingList}" SelectionChanged="cmbSorting_SelectionChanged">
+            <ComboBox.Style>
+                <Style TargetType="ComboBox">
+                    <Setter Property="BorderBrush" Value="#FF2C7DE0"/>
+
+                    <Setter Property="FontFamily" Value="Arial Black"/>
+                    <Setter Property="FontSize" Value="14"/>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
+
+        <ComboBox Name="cmbFilter" BorderThickness="0"   Grid.Row="0" Grid.Column="2" SelectedIndex="0" VerticalAlignment="Center" Margin="5, 0, 5, 0" ItemsSource="{Binding FilterList}" SelectionChanged="cmbFilter_SelectionChanged">
+            <ComboBox.Style>
+                <Style TargetType="ComboBox">
+                    <Setter Property="BorderBrush" Value="#FF2C7DE0"/>
+                    
+                    <Setter Property="FontFamily" Value="Arial Black"/>
+                    <Setter Property="FontSize" Value="14"/>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
+
+        <Button x:Name="AddRecord" Grid.Column="3" Margin="5" Content="Добавить запись"  Grid.Row="0" VerticalAlignment="Top" Background="#FF2C7DE0" BorderBrush="{x:Null}" Foreground="White"  Height="35" FontSize="20" Click="AddRecord_Click" Cursor="Hand" IsDefault="True">
+            <Button.Effect>
+                <DropShadowEffect Color="Black" Direction="180" ShadowDepth="8" Opacity="0.5"  BlurRadius="15"/>
+            </Button.Effect>
+        </Button>
+
+        <ListView x:Name="LViewCars" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=1}" SelectionChanged="LViewRecords_SelectionChanged" VerticalAlignment="Top">
+            <ListView.Effect>
+                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Direction="270"/>
+            </ListView.Effect>
+            <ListView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,01">
+                    <GradientStop Color="#FF2C7DE0" Offset="1"/>
+                    <GradientStop Color="White" Offset="0.5"/>
+                </LinearGradientBrush>
+            </ListView.Background>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Номер записи" Width="Auto">
+                    <GridViewColumn Header="Номер машины" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding ID}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding CarID}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Дата" Width="Auto">
+                    <GridViewColumn Header="Дата" Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Date}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Машина" Width="Auto">
+                    <GridViewColumn Header="Марка" Width="170">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Car}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Mark}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Расход, л/100км" Width="Auto">
+                    <GridViewColumn Header="Модель" Width="170">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Сonsumption}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Model}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Расстояние, км" Width="Auto">
+                    <GridViewColumn Header="Расход, л/100км" Width="170">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Consumption}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Расстояние, км" Width="170">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Distance}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Результат" Width="Auto">
+                    <GridViewColumn Header="Результат" Width="170">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Result}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -91,11 +126,11 @@
                     <MenuItem x:Name="DeleteRecord" Header="Удалить" Click="DeleteRecord_Click" />
                 </ContextMenu>
             </ListView.ContextMenu>
-
         </ListView>
 
-        <Button x:Name="AddRecord" Grid.Row="3" Content="Добавить запись" Visibility="Visible" HorizontalAlignment="Left" Width="200" Margin="0,10,0,10" Click="AddRecord_Click" Grid.Column="1"/>
-
+       
+        
 
     </Grid>
+    
 </Page>

@@ -30,16 +30,20 @@ namespace Fuel_Consumption_Analysis.pages
         public string[] SortingList { get; set; } =
         {
             "Без сортировки",
-            "Стоимость по возрастанию",
-            "Стоимость по убыванию"
+            "Сначала новые",
+            "Сначала старые",
+            "Больше расстояние",
+            "Меньше расстояние",
+            "Больше расход",
+            "Меньше расход"
         };
 
         public string[] FilterList { get; set; } =
         {
-            "Все диапозоны",
-            "0%-9,99%",
-            "10%-14,99%",
-            "15% и более"
+            "Все результаты",
+            "0-14.99",
+            "15-29.99",
+            "30 и более"
         };
 
         private void cmbSorting_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -59,51 +63,95 @@ namespace Fuel_Consumption_Analysis.pages
 
         private void UpdateData()
         {
-            var result = Fuel_Consumption_AnalysisEntities.GetContext().Records.ToList();
+            var result = Fuel_Consumption_AnalysisEntities.GetContext().Cars.ToList();
 
-            //switch (cmbSorting.SelectedIndex)
-            //{
-            //    case 1:
-            //        result = result.OrderBy(p => p.ProductCost).ToList();
-            //        break;
-            //    case 2:
-            //        result = result.OrderByDescending(p => p.ProductCost).ToList();
-            //        break;
-            //}
+            result = result.Where(c => c.Mark.ToLower().Contains(txtSearch.Text.ToLower())
+                             || c.Model.ToLower().Contains(txtSearch.Text.ToLower())).ToList();
 
-            //switch (cmbFilter.SelectedIndex)
-            //{
-            //    case 1:
-            //        result = result.Where(p => p.ProductDiscountAmount >= 0 && p.ProductDiscountAmount < 10).ToList();
-            //        break;
-            //    case 2:
-            //        result = result.Where(p => p.ProductDiscountAmount >= 10 && p.ProductDiscountAmount < 15).ToList();
-            //        break;
-            //    case 3:
-            //        result = result.Where(p => p.ProductDiscountAmount >= 15).ToList();
-            //        break;
-            //}
-            //result = result.Where(p => p.ProductName.ToLower().Contains(txtSearch.Text.ToLower())).ToList();
-            LViewRecords.ItemsSource = result;
+            switch (cmbSorting.SelectedIndex)
+            {
+                case 1:
+                    result = result.OrderByDescending(p => p.Date).ToList();
+                    break;
+                case 2:
+                    result = result.OrderBy(p => p.Date).ToList();
+                    break;
+                case 3:
+                    result = result.OrderByDescending(p => p.Distance).ToList();
+                    break;
+                case 4:
+                    result = result.OrderBy(p => p.Distance).ToList();
+                    break;
+                case 5:
+                    result = result.OrderByDescending(p => p.Consumption).ToList();
+                    break;
+                case 6:
+                    result = result.OrderBy(p => p.Consumption).ToList();
+                    break;
 
-            //txtResultAmount.Text = result.Count.ToString();
+            }
+
+            switch (cmbFilter.SelectedIndex)
+            {
+                case 1:
+                    result = result.Where(s => s.Result < 15).ToList();
+                    break;
+                case 2:
+                    result = result.Where(s => s.Result >= 15 && s.Result < 30).ToList();
+                    break;
+                case 3:
+                    result = result.Where(s => s.Result >= 30).ToList();
+                    break;
+            }
+
+
+            LViewCars.ItemsSource = result;
+
         }
 
         private void AddRecord_Click(object sender, RoutedEventArgs e)
         {
-            AddRedoRecord addRedoRecord = new AddRedoRecord();
+            AddRedoRecord addRedoRecord = new AddRedoRecord(null);
             NavigationService.Navigate(addRedoRecord);
         }
 
         private void RedoRecord_Click(object sender, RoutedEventArgs e)
         {
-            AddRedoRecord addRedoRecord = new AddRedoRecord();
+            AddRedoRecord addRedoRecord = new AddRedoRecord(LViewCars.SelectedItem as Cars);
             NavigationService.Navigate(addRedoRecord);
         }
 
         private void DeleteRecord_Click(object sender, RoutedEventArgs e)
         {
+            if (LViewCars.SelectedItems.Count > 0)
+            {
+                if (MessageBox.Show($"Вы действительно хотите удалить запись?", "Внимание", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                {
+                    return;
+                }
 
+                var selected = LViewCars.SelectedItems.Cast<Cars>().ToArray();
+                int carsCount = 0;
+                var db = Fuel_Consumption_AnalysisEntities.GetContext();
+                foreach (var item in selected)
+                {
+                    
+                    db.Cars.Remove(item);
+                    db.SaveChanges();
+                    carsCount++;
+                    
+                }
+                if (carsCount != 0)
+                {
+                    MessageBox.Show($"Удалено записей: {carsCount}", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                UpdateData();
+
+            }
+            else
+            {
+                MessageBox.Show("Выберите агента для удаления", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void LViewRecords_SelectionChanged(object sender, SelectionChangedEventArgs e)

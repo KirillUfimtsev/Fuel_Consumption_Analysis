@@ -12,13 +12,20 @@ namespace Fuel_Consumption_Analysis.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Records
+    public partial class CarModels
     {
-        public string ID { get; set; }
-        public System.DateTime Date { get; set; }
-        public string CarID { get; set; }
-        public double Сonsumption { get; set; }
-        public double Distance { get; set; }
-        public double Result { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CarModels()
+        {
+            this.Cars = new HashSet<Cars>();
+        }
+    
+        public string ModelID { get; set; }
+        public string MarkID { get; set; }
+        public string Title { get; set; }
+    
+        public virtual CarMarks CarMarks { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cars> Cars { get; set; }
     }
 }

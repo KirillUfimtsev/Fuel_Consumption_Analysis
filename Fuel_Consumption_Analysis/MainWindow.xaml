@@ -12,8 +12,13 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Background="#2fbec1" Grid.ColumnSpan="7">
-            <Button Name="btnBack" HorizontalAlignment="Right" Content="Назад" Click="btnBack_Click" Margin="5"/>
+        <Grid Grid.Row="0" Background="#FF2C7DE0">
+            <Button Name="btnBack" Cursor="Hand" Width="100" Background="White" BorderBrush="{x:Null}" Foreground="#FF2C7DE0" HorizontalAlignment="Right" Height="35" FontSize="20" Content="Назад" Click="btnBack_Click" Margin="5">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" Direction="180" ShadowDepth="8" Opacity="0.5"  BlurRadius="15"/>
+                </Button.Effect>
+            </Button>
+            
             <Image Width="45" Height="45" HorizontalAlignment="Left" Margin="5" Source="pictures/Citycons_fuel_icon-icons.com_67929.ico"/>
         </Grid>
         <Frame x:Name="FrmMain" Grid.Row="1" NavigationUIVisibility="Hidden" ContentRendered="FrmMain_ContentRendered" />
